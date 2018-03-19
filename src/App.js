@@ -3,14 +3,59 @@ import './App.css';
 import Person from './Person/Person';
 
 class App extends Component {
+    state = {
+        persons: [
+            { name: 'Max', age: 28 },
+            { name: 'Manu', age: 29 },
+            { name: 'Kira', age: 27 }
+
+        ]
+    }
+    //methods:
+    switchNameHandler = (newName) => {
+       //DON'T DO THIS!!!! this.state.persons[0].name = 'Maxine';
+        this.setState({
+            persons: [
+                { name: newName, age: 30 },
+                { name: 'Manu', age: 30 },
+                { name: 'Stephanie', age: 30 }
+
+            ]})
+    }
+
+    nameChangedHandler = (event) => {
+        this.setState({
+            persons: [
+                { name: 'Max', age: 28 },
+                { name: event.target.value, age: 29 },
+                { name: 'Kira', age: 27 }
+
+            ]
+        })
+    }
+
     render() {
+        const style = {
+            backgroundColor: 'white',
+            font: 'inherit',
+            border: '1px solid blue',
+            padding: '8px',
+            cursor: 'pointer'
+        }
         return (
             <div className="App">
                 <h1>hello!</h1>
                 <p>paragraph</p>
-                <Person name="Max" age="28" />
-                <Person name="Manu" age="29">My hobbies: racing.</Person>
-                <Person name="Kira" age="27"/>
+                <button style={style} onClick={() => this.switchNameHandler('AAAAA!!')}>Switch person</button>
+                <Person
+                    name={this.state.persons[0].name} age={this.state.persons[0].age} />
+                <Person
+                    name={this.state.persons[1].name}
+                    age={this.state.persons[1].age}
+                    click={this.switchNameHandler.bind(this, 'BBBBB')}
+                    change={this.nameChangedHandler} > My hobbies: racing.</Person>
+                <Person
+                    name={this.state.persons[2].name} age={this.state.persons[2].age} />
             </div>
         );
         //return React.createElement('div', { className: 'App' }, React.createElement('h1', null, 'hi?'));
