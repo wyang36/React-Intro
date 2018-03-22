@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Classes from './App.css';
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
+
 
 class App extends Component {
     state = {
@@ -40,39 +42,29 @@ class App extends Component {
     }
 
     render() {
-        const style = {
-            backgroundColor: 'green',
-            color: 'white',
-            font: 'inherit',
-            border: '1px solid blue',
-            padding: '8px',
-            cursor: 'pointer'
-        }
 
         let persons = null;
+        let btnClass = '';
 
         if (this.state.showPersons) {
             persons = (
                 <div>
                     {
                         this.state.persons.map((person, index) => {
-                            return <Person
+                            return <ErrorBoundary
+                                key={person.id}>
+                                <Person
                                 click={() => this.deleteNameHandler(index)}
                                 name={person.name}
                                 age={person.age}
-                                key={person.id}
                                 changed={(event) => this.nameChangedHandler(event, index)}
-                            />;
+                            /></ErrorBoundary>;
                         })
                     }
                 </div>
             );
 
-            style.backgroundColor = 'red';
-            style[':hover'] = {
-                backgroundColor: 'pink',
-                color: 'black'
-            }
+            btnClass = Classes.red;
         }
 
         const classes = [];
@@ -86,7 +78,7 @@ class App extends Component {
             <div className={Classes.App}>
                 <h1>hello!</h1>
                 <p className={classes.join(' ')}>paragraph</p>
-                <button style={style} onClick={this.togglePersonsHandler}>Toggle person</button>
+                <button className={btnClass} onClick={this.togglePersonsHandler}>Toggle person</button>
                 {persons}
             </div>
         );
