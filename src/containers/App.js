@@ -40,7 +40,8 @@ class App extends PureComponent {
             { id: '2', name: 'Kira', age: 27 }
 
         ],
-        showPersons: false
+        showPersons: false,
+        toggleClicked: 0
     }
     //methods:
     nameChangedHandler = (event, index) => {
@@ -66,7 +67,14 @@ class App extends PureComponent {
     }
 
     togglePersonsHandler = () => {
-        this.setState({ showPersons: !this.state.showPersons });
+        const doesShow = this.state.showPersons;
+        //DO NOT use this.state inside setState unless using prevState
+        this.setState((prevState, props) => {
+            return {
+                showPersons: !doesShow,
+                toggleClicked: prevState.toggleClicked+1
+            }            
+        });
     }
 
     render() {
