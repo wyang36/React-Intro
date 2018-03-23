@@ -1,9 +1,38 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Classes from './App.css';
-import Person from '../components/Persons/Person/Person';
+import Persons from '../components/Persons/Persons'
+import Cockpit from '../components/Cockpit/Cockpit'
 
 
-class App extends Component {
+class App extends PureComponent {
+    constructor(props) {
+        super(props);
+        console.log('appjs inside construction', props);
+        //this.state = {};
+    }
+
+    componentWillMount() {
+        console.log('appjs component will mount');
+    }
+
+    componentDidMount() {
+        console.log('appjs inside component did mount');
+    }
+
+    //shouldComponentUpdate(nextProps, nextState) {
+    //    console.log('update appjs, inside shouldComponentUpdate', nextProps, nextState);
+    //    //can use this to improve performance.
+    //    return nextState.showPersons !== this.state.showPersons;
+    //}
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log('update appjs, inside componentWillUpdate', nextProps, nextState);
+    }
+
+    componentDidUpdate() {
+        console.log('update appjs, inside componentDidUpdate', this.props);
+    }
+
     state = {
         persons: [
             { id: '0', name: 'Max', age: 28 },
@@ -41,43 +70,26 @@ class App extends Component {
     }
 
     render() {
-
+        console.log('appjs inside render');
         let persons = null;
-        let btnClass = '';
 
         if (this.state.showPersons) {
             persons = (
-                <div>
-                    {
-                        this.state.persons.map((person, index) => {
-                            return (
-                                <Person
-                                    click={() => this.deleteNameHandler(index)}
-                                    name={person.name}
-                                    age={person.age}
-                                    key={person.id}
-                                    changed={(event) => this.nameChangedHandler(event, index)}
-                                />);
-                        })
-                    }
-                </div>
+                <Persons persons={this.state.persons}
+                    clicked={this.deleteNameHandler}
+                    changed={this.nameChangedHandler} />
             );
-
-            btnClass = Classes.red;
         }
 
-        const classes = [];
-        if (this.state.persons.length <= 2)
-            classes.push(Classes.red);
-        if (this.state.persons.length <= 1)
-            classes.push(Classes.bold);
-
+        
 
         return (
             <div className={Classes.App}>
-                <h1>hello!</h1>
-                <p className={classes.join(' ')}>paragraph</p>
-                <button className={btnClass} onClick={this.togglePersonsHandler}>Toggle person</button>
+                <button onClick={() => { this.setState({ showPersons: true }) }}> Show Persons</button>
+                <Cockpit title={this.props.title}
+                    persons={this.state.persons}
+                    showPersons={this.state.showPersons}
+                    clicked={this.togglePersonsHandler} />
                 {persons}
             </div>
         );
